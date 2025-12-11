@@ -1,0 +1,40 @@
+╔══════════════════════════════════════════════════════════════╗
+║                  OPEN THIS URL IN YOUR BROWSER              ║
+╚══════════════════════════════════════════════════════════════╝
+
+🌐 CORRECT URL:
+
+    http://localhost:3000
+
+❌ WRONG URL (Old Streamlit app):
+
+    http://localhost:8501
+
+
+✅ WHAT YOU SHOULD SEE:
+
+1. Purple gradient background
+2. Large header: "✨ AI Image Caption Generator ✨"
+3. Sidebar with 6 tabs:
+   - 📝 Captioning
+   - 📊 Analytics
+   - 🔄 Comparison
+   - 💾 Dataset Explorer
+   - 🏆 Evaluation
+   - 🎓 Learning
+4. Upload area with cloud icon
+5. Beautiful animations
+
+
+🔧 IF YOU SEE THE OLD APP:
+
+You're on the WRONG URL!
+Close the browser tab and open: http://localhost:3000
+
+
+📝 COPY THIS URL:
+
+http://localhost:3000
+
+
+Press Ctrl+L in browser, paste the URL, and press Enter!

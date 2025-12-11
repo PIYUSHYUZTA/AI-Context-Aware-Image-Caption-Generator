@@ -1,0 +1,265 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                        🎓 EDUVISION AI PLATFORM                              ║
+║                   Educational Image Analysis Platform                        ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                              MAIN APPLICATION                                │
+│                          app_eduvision.py                                    │
+│                                                                              │
+│  ┌────────────────────────────────────────────────────────────────────┐    │
+│  │                        🏠 HOME PAGE                                 │    │
+│  │  • Platform Overview                                               │    │
+│  │  • Module Cards                                                    │    │
+│  │  • Quick Stats                                                     │    │
+│  │  • Getting Started Guide                                           │    │
+│  └────────────────────────────────────────────────────────────────────┘    │
+└──────────────────────────────────────────────────────────────────────────────┘
+                                      │
+                    ┌─────────────────┴─────────────────┐
+                    │    SIDEBAR NAVIGATION             │
+                    │    • Home                         │
+                    │    • Image Captioning             │
+                    │    • Analytics Dashboard          │
+                    │    • Learning Module              │
+                    │    • Model Comparison Lab         │
+                    │    • Dataset Explorer             │
+                    │    • Evaluation Center            │
+                    └───────────────────────────────────┘
+                                      │
+        ┌─────────────────────────────┼─────────────────────────────┐
+        │                             │                             │
+        ▼                             ▼                             ▼
+
+┌─────────────────────┐    ┌─────────────────────┐    ┌─────────────────────┐
+│  🎨 IMAGE           │    │  📊 ANALYTICS       │    │  🎓 LEARNING        │
+│  CAPTIONING         │    │  DASHBOARD          │    │  MODULE             │
+├─────────────────────┤    ├─────────────────────┤    ├─────────────────────┤
+│ • Upload Images     │    │ • Model Performance │    │ • Introduction      │
+│ • Generate Captions │    │ • Dataset Stats     │    │ • Feature Extract   │
+│ • Greedy Search     │    │ • Vocabulary        │    │ • Seq Generation    │
+│ • Beam Search       │    │ • Training Metrics  │    │ • Training Process  │
+│ • Performance       │    │ • Visualizations    │    │ • Eval Metrics      │
+│ • Sample Images     │    │ • Real-time Calc    │    │ • Interactive       │
+└─────────────────────┘    └─────────────────────┘    └─────────────────────┘
+
+        │                             │                             │
+        ▼                             ▼                             ▼
+
+┌─────────────────────┐    ┌─────────────────────┐    ┌─────────────────────┐
+│  🔬 MODEL           │    │  📈 DATASET         │    │  🎯 EVALUATION      │
+│  COMPARISON LAB     │    │  EXPLORER           │    │  CENTER             │
+├─────────────────────┤    ├─────────────────────┤    ├─────────────────────┤
+│ • Side-by-Side      │    │ • Overview Stats    │    │ • Single Eval       │
+│ • Strategy Compare  │    │ • Word Analysis     │    │ • Batch Eval        │
+│ • Performance       │    │ • Caption Browser   │    │ • BLEU Scores       │
+│ • Speed vs Quality  │    │ • Visualizations    │    │ • Quality Metrics   │
+│ • Analysis          │    │ • Search Function   │    │ • Metrics Guide     │
+│ • Benchmarking      │    │ • Word Clouds       │    │ • Assessment        │
+└─────────────────────┘    └─────────────────────┘    └─────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════
+
+                            TECHNICAL ARCHITECTURE
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                              BACKEND LAYERS                                  │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌────────────────────────────────────────────────────────────────────┐    │
+│  │                        UTILITIES LAYER                             │    │
+│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐            │    │
+│  │  │   config.py  │  │ image_utils  │  │ model_utils  │            │    │
+│  │  │              │  │              │  │              │            │    │
+│  │  │ • Config     │  │ • Feature    │  │ • Caption    │            │    │
+│  │  │   Management │  │   Extraction │  │   Generation │            │    │
+│  │  │ • YAML Load  │  │ • VGG16      │  │ • Greedy     │            │    │
+│  │  │ • Get/Set    │  │ • PIL/Array  │  │ • Beam Search│            │    │
+│  │  └──────────────┘  └──────────────┘  └──────────────┘            │    │
+│  │                                                                    │    │
+│  │  ┌──────────────┐  ┌──────────────┐                              │    │
+│  │  │  logger.py   │  │ evaluation   │                              │    │
+│  │  │              │  │              │                              │    │
+│  │  │ • Logging    │  │ • BLEU       │                              │    │
+│  │  │ • Debug      │  │ • Metrics    │                              │    │
+│  │  └──────────────┘  └──────────────┘                              │    │
+│  └────────────────────────────────────────────────────────────────────┘    │
+│                                                                              │
+│  ┌────────────────────────────────────────────────────────────────────┐    │
+│  │                        AI/ML MODELS                                │    │
+│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐            │    │
+│  │  │   VGG16      │  │     LSTM     │  │  Tokenizer   │            │    │
+│  │  │              │  │              │  │              │            │    │
+│  │  │ • Pre-trained│  │ • 256 units  │  │ • 54 words   │            │    │
+│  │  │ • ImageNet   │  │ • Sequence   │  │ • startseq   │            │    │
+│  │  │ • 4096-dim   │  │ • Generation │  │ • endseq     │            │    │
+│  │  └──────────────┘  └──────────────┘  └──────────────┘            │    │
+│  └────────────────────────────────────────────────────────────────────┘    │
+│                                                                              │
+│  ┌────────────────────────────────────────────────────────────────────┐    │
+│  │                        DATA LAYER                                  │    │
+│  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐            │    │
+│  │  │   model.h5   │  │ tokenizer    │  │ descriptions │            │    │
+│  │  │              │  │   .pkl       │  │   .txt       │            │    │
+│  │  │ • Trained    │  │              │  │              │            │    │
+│  │  │   Weights    │  │ • Vocabulary │  │ • Captions   │            │    │
+│  │  │ • Architecture│  │ • Word Index │  │ • Dataset    │            │    │
+│  │  └──────────────┘  └──────────────┘  └──────────────┘            │    │
+│  └────────────────────────────────────────────────────────────────────┘    │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════
+
+                            DATA FLOW DIAGRAM
+
+┌──────────────┐
+│   USER       │
+│   UPLOADS    │
+│   IMAGE      │
+└──────┬───────┘
+       │
+       ▼
+┌──────────────────────────────────────────────────────────────┐
+│                    IMAGE PREPROCESSING                       │
+│  • Resize to 224x224                                         │
+│  • Convert to array                                          │
+│  • Normalize values                                          │
+└──────────────────────┬───────────────────────────────────────┘
+                       │
+                       ▼
+┌──────────────────────────────────────────────────────────────┐
+│                  FEATURE EXTRACTION (VGG16)                  │
+│  • Pass through convolutional layers                         │
+│  • Extract 4096-dimensional feature vector                   │
+│  • Represents visual content                                 │
+└──────────────────────┬───────────────────────────────────────┘
+                       │
+                       ▼
+┌──────────────────────────────────────────────────────────────┐
+│                  CAPTION GENERATION (LSTM)                   │
+│  1. Start with 'startseq' token                              │
+│  2. Combine features + previous words                        │
+│  3. Predict next word                                        │
+│  4. Add to sequence                                          │
+│  5. Repeat until 'endseq' or max length                      │
+└──────────────────────┬───────────────────────────────────────┘
+                       │
+                       ▼
+┌──────────────────────────────────────────────────────────────┐
+│                    POST-PROCESSING                           │
+│  • Remove start/end tokens                                   │
+│  • Clean up caption                                          │
+│  • Calculate metrics                                         │
+└──────────────────────┬───────────────────────────────────────┘
+                       │
+                       ▼
+┌──────────────────────────────────────────────────────────────┐
+│                    DISPLAY RESULTS                           │
+│  • Show generated caption                                    │
+│  • Display performance metrics                               │
+│  • Provide analysis                                          │
+└──────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════
+
+                        EDUCATIONAL VALUE CHAIN
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                                                             │
+│  LEARN                    EXPERIMENT                    ANALYZE             │
+│    ↓                          ↓                            ↓                │
+│  ┌─────────┐              ┌─────────┐                 ┌─────────┐          │
+│  │ Learning│              │ Caption │                 │Analytics│          │
+│  │ Module  │──────────────│Generation│────────────────│Dashboard│          │
+│  │         │              │         │                 │         │          │
+│  │ • Theory│              │ • Upload│                 │ • Stats │          │
+│  │ • Concepts│            │ • Generate│               │ • Metrics│          │
+│  │ • Examples│            │ • Compare│                │ • Insights│         │
+│  └─────────┘              └─────────┘                 └─────────┘          │
+│      │                        │                            │                │
+│      └────────────────────────┼────────────────────────────┘                │
+│                               │                                             │
+│                               ▼                                             │
+│                        ┌─────────────┐                                      │
+│                        │  EVALUATE   │                                      │
+│                        │             │                                      │
+│                        │ • Quality   │                                      │
+│                        │ • Metrics   │                                      │
+│                        │ • Assessment│                                      │
+│                        └─────────────┘                                      │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════
+
+                        ALIGNMENT WITH EXPERTISE
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                                                                             │
+│  SOFTWARE ENGINEERING          DATA ANALYSIS           EDUCATION            │
+│  ─────────────────────         ─────────────           ─────────            │
+│  ✓ Modular Architecture        ✓ Statistics           ✓ Interactive        │
+│  ✓ Clean Code                  ✓ Visualizations       ✓ Step-by-step       │
+│  ✓ Best Practices              ✓ Metrics              ✓ Hands-on           │
+│  ✓ Documentation               ✓ Exploration          ✓ Self-paced         │
+│  ✓ Scalability                 ✓ Insights             ✓ Progressive        │
+│                                                                             │
+│  MOOCS                         BLENDED LEARNING                             │
+│  ─────                         ────────────────                             │
+│  ✓ Self-contained              ✓ Theory + Practice                          │
+│  ✓ No prerequisites            ✓ In-class demos                             │
+│  ✓ Comprehensive               ✓ Homework ready                             │
+│  ✓ Assessments                 ✓ Group projects                             │
+│  ✓ Scalable                    ✓ Research capable                           │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════
+
+                            KEY STATISTICS
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                                                                              │
+│  PLATFORM METRICS                    TECHNICAL METRICS                       │
+│  ────────────────                    ─────────────────                       │
+│  • 6 Modules                         • VGG16 (4096-dim features)             │
+│  • 15+ Visualizations                • LSTM (256 units)                      │
+│  • 5 Learning Sections               • 54-word vocabulary                    │
+│  • 5+ Evaluation Metrics             • 0.15-1.5s generation time             │
+│  • 6 Documentation Files             • Beam width: 1-10                      │
+│                                                                              │
+│  EDUCATIONAL VALUE                   CODE QUALITY                            │
+│  ─────────────────                   ────────────                            │
+│  • Interactive Learning              • Modular Design                        │
+│  • Hands-on Practice                 • Type Hints                            │
+│  • Real-time Feedback                • Documentation                         │
+│  • Self-paced Content                • Error Handling                        │
+│  • Progressive Complexity            • Logging System                        │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════
+
+                            QUICK REFERENCE
+
+Launch Application:
+  streamlit run app_eduvision.py
+
+Check Tokenizer:
+  python -c "from pickle import load; t = load(open('tokenizer.pkl', 'rb')); 
+  print(f'Vocab: {len(t.word_index)+1}')"
+
+Retrain Model:
+  python train_improved.py
+
+Verify Setup:
+  python check_model.py
+
+═══════════════════════════════════════════════════════════════════════════════
+
+                        🎓 EDUVISION AI PLATFORM
+                   Making AI Education Accessible & Interactive
+
+═══════════════════════════════════════════════════════════════════════════════

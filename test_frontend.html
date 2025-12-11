@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Caption Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; }
+        input[type="file"] {
+            margin: 20px 0;
+            padding: 10px;
+        }
+        button {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover { background: #4f46e5; }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f0f9ff;
+            border-radius: 6px;
+            display: none;
+        }
+        #error {
+            margin-top: 20px;
+            padding: 20px;
+            background: #fee2e2;
+            border-radius: 6px;
+            color: #991b1b;
+            display: none;
+        }
+        .loading {
+            color: #6366f1;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test Caption Generator</h1>
+        <p>This is a simple test to verify the API connection works.</p>
+        
+        <input type="file" id="imageInput" accept="image/*">
+        <br>
+        <button id="generateBtn" onclick="generateCaption()">Generate Caption</button>
+        
+        <div id="result">
+            <h3>✅ Caption Generated:</h3>
+            <p id="caption" style="font-size: 18px; font-weight: bold;"></p>
+            <p>Confidence: <span id="confidence"></span></p>
+            <p>Time: <span id="time"></span>s</p>
+        </div>
+        
+        <div id="error">
+            <h3>❌ Error:</h3>
+            <p id="errorMessage"></p>
+        </div>
+        
+        <div id="status"></div>
+    </div>
+
+    <script>
+        async function generateCaption() {
+            const fileInput = document.getElementById('imageInput');
+            const resultDiv = document.getElementById('result');
+            const errorDiv = document.getElementById('error');
+            const statusDiv = document.getElementById('status');
+            const generateBtn = document.getElementById('generateBtn');
+            
+            // Hide previous results
+            resultDiv.style.display = 'none';
+            errorDiv.style.display = 'none';
+            
+            // Check if file is selected
+            if (!fileInput.files || !fileInput.files[0]) {
+                errorDiv.style.display = 'block';
+                document.getElementById('errorMessage').textContent = 'Please select an image first!';
+                return;
+            }
+            
+            // Disable button and show loading
+            generateBtn.disabled = true;
+            statusDiv.innerHTML = '<p class="loading">⏳ Generating caption...</p>';
+            
+            try {
+                // Create form data
+                const formData = new FormData();
+                formData.append('file', fileInput.files[0]);
+                
+                console.log('Sending request to: http://localhost:8000/api/v1/caption');
+                
+                // Send request
+                const response = await fetch('http://localhost:8000/api/v1/caption', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                console.log('Response data:', data);
+                
+                // Show result
+                document.getElementById('caption').textContent = data.caption;
+                document.getElementById('confidence').textContent = data.confidence;
+                document.getElementById('time').textContent = data.processing_time;
+                resultDiv.style.display = 'block';
+                statusDiv.innerHTML = '';
+                
+            } catch (error) {
+                console.error('Error:', error);
+                errorDiv.style.display = 'block';
+                document.getElementById('errorMessage').textContent = error.message;
+                statusDiv.innerHTML = '';
+            } finally {
+                generateBtn.disabled = false;
+            }
+        }
+        
+        // Test backend connection on load
+        window.onload = async function() {
+            try {
+                const response = await fetch('http://localhost:8000/health');
+                const data = await response.json();
+                console.log('✅ Backend is healthy:', data);
+            } catch (error) {
+                console.error('❌ Cannot connect to backend:', error);
+                alert('⚠️ Backend is not running! Please start it with: python api.py');
+            }
+        };
+    </script>
+</body>
+</html>

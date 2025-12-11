@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // GSAP Animation Controller for Streamlit
+        (function() {
+            // Wait for parent document to be ready
+            function initGSAPAnimations() {
+                const parentDoc = window.parent.document;
+                
+                // Animate main header
+                const header = parentDoc.querySelector('.main-header');
+                if (header) {
+                    gsap.from(header, {
+                        duration: 1.2,
+                        y: -50,
+                        opacity: 0,
+                        ease: 'elastic.out(1, 0.5)',
+                        delay: 0.2
+                    });
+                }
+                
+                // Animate subtitle
+                const subtitle = parentDoc.querySelector('.subtitle');
+                if (subtitle) {
+                    gsap.from(subtitle, {
+                        duration: 1,
+                        y: 30,
+                        opacity: 0,
+                        ease: 'power3.out',
+                        delay: 0.5
+                    });
+                }
+                
+                // Watch for caption boxes
+                const observer = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        mutation.addedNodes.forEach(function(node) {
+                            if (node.classList && node.classList.contains('caption-box')) {
+                                gsap.from(node, {
+                                    duration: 0.8,
+                                    scale: 0.8,
+                                    opacity: 0,
+                                    rotation: -5,
+                                    ease: 'back.out(1.7)'
+                                });
+                            }
+                        });
+                    });
+                });
+                
+                observer.observe(parentDoc.body, {
+                    childList: true,
+                    subtree: true
+                });
+                
+                // Animate buttons
+                const buttons = parentDoc.querySelectorAll('.stButton>button');
+                buttons.forEach(button => {
+                    button.addEventListener('mouseenter', function() {
+                        gsap.to(this, {
+                            duration: 0.3,
+                            scale: 1.05,
+                            y: -5,
+                            ease: 'power2.out'
+                        });
+                    });
+                    
+                    button.addEventListener('mouseleave', function() {
+                        gsap.to(this, {
+                            duration: 0.3,
+                            scale: 1,
+                            y: 0,
+                            ease: 'power2.out'
+                        });
+                    });
+                    
+                    button.addEventListener('click', function() {
+                        gsap.timeline()
+                            .to(this, { duration: 0.1, scale: 0.95 })
+                            .to(this, { duration: 0.3, scale: 1.05, ease: 'elastic.out(1, 0.3)' });
+                    });
+                });
+                
+                // Animate images
+                const imageObserver = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        mutation.addedNodes.forEach(function(node) {
+                            if (node.tagName === 'IMG' || (node.querySelector && node.querySelector('img'))) {
+                                const img = node.tagName === 'IMG' ? node : node.querySelector('img');
+                                gsap.from(img, {
+                                    duration: 0.8,
+                                    scale: 0.9,
+                                    opacity: 0,
+                                    rotation: -5,
+                                    ease: 'back.out(1.4)'
+                                });
+                            }
+                        });
+                    });
+                });
+                
+                imageObserver.observe(parentDoc.body, {
+                    childList: true,
+                    subtree: true
+                });
+                
+                // Animate sidebar
+                const sidebar = parentDoc.querySelector('[data-testid="stSidebar"]');
+                if (sidebar) {
+                    gsap.from(sidebar, {
+                        duration: 0.8,
+                        x: -100,
+                        opacity: 0,
+                        ease: 'power3.out',
+                        delay: 0.3
+                    });
+                }
+                
+                // Animate metrics
+                const metricsObserver = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        mutation.addedNodes.forEach(function(node) {
+                            if (node.querySelector && node.querySelector('[data-testid="stMetricValue"]')) {
+                                const metrics = node.querySelectorAll('[data-testid="stMetricValue"]');
+                                metrics.forEach((metric, i) => {
+                                    gsap.from(metric, {
+                                        duration: 0.6,
+                                        scale: 0,
+                                        opacity: 0,
+                                        ease: 'back.out(2)',
+                                        delay: i * 0.1
+                                    });
+                                });
+                            }
+                        });
+                    });
+                });
+                
+                metricsObserver.observe(parentDoc.body, {
+                    childList: true,
+                    subtree: true
+                });
+                
+                // Floating animation for info boxes
+                const infoBoxes = parentDoc.querySelectorAll('.info-box');
+                infoBoxes.forEach((box, i) => {
+                    gsap.to(box, {
+                        duration: 3 + i,
+                        y: -10,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: 'sine.inOut',
+                        delay: i * 0.5
+                    });
+                });
+                
+                console.log('✅ GSAP animations initialized!');
+            }
+            
+            // Try to initialize immediately and on load
+            if (document.readyState === 'complete') {
+                setTimeout(initGSAPAnimations, 100);
+            } else {
+                window.addEventListener('load', () => {
+                    setTimeout(initGSAPAnimations, 100);
+                });
+            }
+            
+            // Re-initialize on Streamlit rerun
+            setInterval(() => {
+                if (window.parent.document.querySelector('.main-header')) {
+                    initGSAPAnimations();
+                }
+            }, 2000);
+        })();
+    </script>
+</body>
+</html>

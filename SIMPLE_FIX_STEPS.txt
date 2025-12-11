@@ -1,0 +1,19 @@
+SIMPLE STEPS TO FIX YOUR MODEL - FOLLOW EXACTLY
+
+PROBLEM: Your model only knows 53 words, so it generates bad captions.
+
+SOLUTION: I will create a script that you run ONCE. It will:
+1. Create a larger vocabulary (500+ words)
+2. Train a better model (takes 10-15 minutes)
+3. Save it automatically
+
+WHAT YOU DO:
+1. I will create the script (train_final_model.py)
+2. You run: python train_final_model.py
+3. Wait 10-15 minutes
+4. Done! Model will work better
+
+The model won't be perfect (needs full Flickr8k for that), 
+but it will be MUCH better than current 53-word model.
+
+Do you want me to create this script? Reply YES or NO.

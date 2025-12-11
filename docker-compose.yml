@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # FastAPI Backend
+  api:
+    build: .
+    container_name: caption-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./model.h5:/app/model.h5
+      - ./tokenizer.pkl:/app/tokenizer.pkl
+      - ./features.pkl:/app/features.pkl
+      - ./logs:/app/logs
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python api.py
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Streamlit Frontend
+  streamlit:
+    build: .
+    container_name: caption-streamlit
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./model.h5:/app/model.h5
+      - ./tokenizer.pkl:/app/tokenizer.pkl
+      - ./features.pkl:/app/features.pkl
+      - ./logs:/app/logs
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: streamlit run app_enhanced.py --server.port=8501 --server.address=0.0.0.0
+    restart: unless-stopped
+    depends_on:
+      - api
+
+  # Redis Cache (Optional)
+  redis:
+    image: redis:7-alpine
+    container_name: caption-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+
+volumes:
+  redis-data:

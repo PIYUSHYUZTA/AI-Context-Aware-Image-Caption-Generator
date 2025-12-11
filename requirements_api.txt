@@ -1,0 +1,4 @@
+# Additional requirements for external API caption generation
+transformers>=4.35.0
+torch>=2.0.0
+pillow>=10.0.0
